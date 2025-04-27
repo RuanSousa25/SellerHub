@@ -55,7 +55,7 @@ export default function OrderFormPage() {
         setSellers(sllrs);
       })
       .catch(console.error);
-  }, []);
+  }, [appKey, appToken]);
 
   function handleSellersSelect(ids) {
     setSelectedSellers(ids);
