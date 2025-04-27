@@ -35,10 +35,18 @@ export default function OrderFormPage() {
   const [sellers, setSellers] = useState([]);
   const [fieldValues, setFieldValues] = useState({});
   const [fieldChecks, setFieldChecks] = useState({});
+  const [appKey, setAppKey] = useState("");
+  const [appToken, setAppToken] = useState("");
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/vtex/sellers`)
+      .get(`${import.meta.env.VITE_API_BASE_URL}/api/vtex/sellers`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-VTEX-API-AppToken": appToken,
+          "X-VTEX-API-AppKey": appKey,
+        },
+      })
       .then((resp) => {
         const sllrs = resp.data.map((s) => ({
           value: s.sellerId,
@@ -90,6 +98,13 @@ export default function OrderFormPage() {
         {
           ids: selectedSellers.map((seller) => seller.value),
           patch: patch,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json-patch+json",
+            "X-VTEX-API-AppToken": appToken,
+            "X-VTEX-API-AppKey": appKey,
+          },
         }
       )
       .then(() => alert("Atualizado com sucesso!"))
@@ -151,6 +166,28 @@ export default function OrderFormPage() {
           <button onClick={handleSubmit}>Enviar</button>
         </div>
       </section>
+      <div className="app-token-key">
+        <div className="appKey input-div-app">
+          <label>AppKey</label>
+          <input
+            type="text"
+            value={appKey}
+            onChange={(e) => {
+              setAppKey(e.target.value);
+            }}
+          />
+        </div>
+        <div className="appToken input-div-app">
+          <label>AppToken</label>
+          <input
+            type="text"
+            value={appToken}
+            onChange={(e) => {
+              setAppToken(e.target.value);
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
