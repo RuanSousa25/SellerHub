@@ -1,0 +1,33 @@
+.log {
+  width: 250px;
+  padding: 5px 15px;
+  border-radius: 3px;
+}
+.success {
+  background-color: #d1f7d6;
+  border-color: #276738;
+  .log-title {
+    margin: 0;
+    font-size: medium;
+    color: #276738;
+  }
+  .log-message {
+    margin: 0;
+    font-size: small;
+    color: #3b7f4e;
+  }
+}
+.error {
+  background-color: #fde2e1;
+  border-color: #a11d1a;
+  .log-title {
+    margin: 0;
+    font-size: medium;
+    color: #a11d1a;
+  }
+  .log-message {
+    margin: 0;
+    font-size: small;
+    color: #c43e3b;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MultiSelect from "../../Components/MultiSelect/MultiSelect";
 import "./OrderFormPage.css";
 import axios from "axios";
+import Logs from "../../Components/Logs/logs";
 
 const OrderFormFields = [
   {
@@ -37,8 +38,13 @@ export default function OrderFormPage() {
   const [fieldChecks, setFieldChecks] = useState({});
   const [appKey, setAppKey] = useState("");
   const [appToken, setAppToken] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [logs, setLogs] = useState([]);
+  const [showLogs, setShowLogs] = useState(false);
 
   useEffect(() => {
+    if (appToken === "" || appKey === "") return;
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/api/vtex/sellers`, {
         headers: {
@@ -53,8 +59,12 @@ export default function OrderFormPage() {
           label: s.name,
         }));
         setSellers(sllrs);
+        setLoading(false);
       })
-      .catch(console.error);
+      .catch(() => {
+        console.error;
+        setLoading(false);
+      });
   }, [appKey, appToken]);
 
   function handleSellersSelect(ids) {
@@ -90,6 +100,7 @@ export default function OrderFormPage() {
       return;
     }
 
+    setLoading(true);
     axios
       .patch(
         `${
@@ -107,17 +118,25 @@ export default function OrderFormPage() {
           },
         }
       )
-      .then(() => alert("Atualizado com sucesso!"))
+      .then((resp) => {
+        setLogs(resp.data);
+        setLoading(false);
+      })
       .catch((err) => {
         console.error(err);
-        alert("Erro ao atualizar");
+        setLoading(false);
       });
+  }
+
+  function toggleLogs() {
+    setShowLogs((prevState) => !prevState);
   }
 
   return (
     <div className="order-form-component">
       <h1>Configurações de Pedidos</h1>
       <MultiSelect
+        placeholder={loading ? "Carregando..." : "Selecione"}
         options={sellers}
         value={selectedSellers}
         onChange={handleSellersSelect}
@@ -162,8 +181,13 @@ export default function OrderFormPage() {
           </div>
         ))}
 
-        <div className="input-area">
-          <button onClick={handleSubmit}>Enviar</button>
+        <div className="submit-buttons">
+          <button onClick={handleSubmit} disabled={loading}>
+            Enviar
+          </button>
+          <button onClick={toggleLogs} disabled={logs.length === 0 || loading}>
+            Logs
+          </button>
         </div>
       </section>
       <div className="app-token-key">
@@ -188,6 +212,7 @@ export default function OrderFormPage() {
           />
         </div>
       </div>
+      <Logs show={showLogs} logs={logs} />
     </div>
   );
 }

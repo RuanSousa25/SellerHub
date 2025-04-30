@@ -2,7 +2,13 @@ import React, { useRef } from "react";
 import "./MultiSelect.css";
 
 import Select from "react-select";
-export default function MultiSelect({ options, value, onChange, isDisabled }) {
+export default function MultiSelect({
+  placeholder,
+  options,
+  value,
+  onChange,
+  isDisabled,
+}) {
   const valueRef = useRef(value);
   valueRef.current = value;
 
@@ -53,6 +59,7 @@ export default function MultiSelect({ options, value, onChange, isDisabled }) {
 
   return (
     <Select
+      placeholder={placeholder}
       isOptionSelected={isOptionSelected}
       options={getOptions()}
       value={getValue()}
