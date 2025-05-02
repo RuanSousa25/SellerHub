@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MultiSelect from "../../Components/MultiSelect/MultiSelect";
 import "./OrderFormPage.css";
 import axios from "axios";
 import Logs from "../../Components/Logs/logs";
+import { useAuth } from "../../Context/AuthContext";
+import { useOrderFormApi } from "../../Hooks/useOrderFormApi";
+import { useSellersApi } from "../../Hooks/useSellersApi";
 
 const OrderFormFields = [
   {
@@ -32,27 +35,21 @@ const OrderFormFields = [
 ];
 
 export default function OrderFormPage() {
+  const { appKey, appToken, setAuth } = useAuth();
+  const { getSellersList } = useSellersApi();
+  const { patchOrderForm } = useOrderFormApi();
   const [selectedSellers, setSelectedSellers] = useState([]);
   const [sellers, setSellers] = useState([]);
   const [fieldValues, setFieldValues] = useState({});
   const [fieldChecks, setFieldChecks] = useState({});
-  const [appKey, setAppKey] = useState("");
-  const [appToken, setAppToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
   const [showLogs, setShowLogs] = useState(false);
 
   useEffect(() => {
-    if (appToken === "" || appKey === "") return;
+    if (appToken === null || appKey === null) return;
     setLoading(true);
-    axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/vtex/sellers`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-VTEX-API-AppToken": appToken,
-          "X-VTEX-API-AppKey": appKey,
-        },
-      })
+    getSellersList()
       .then((resp) => {
         const sllrs = resp.data.map((s) => ({
           value: s.sellerId,
@@ -81,7 +78,6 @@ export default function OrderFormPage() {
 
   function handleSubmit() {
     const patch = [];
-    console.log(selectedSellers);
     OrderFormFields.forEach((field) => {
       if (fieldChecks[field.path]) {
         patch.push({
@@ -94,30 +90,15 @@ export default function OrderFormPage() {
         });
       }
     });
-
     if (patch.length === 0 || selectedSellers.length === 0) {
       alert("Selecione ao menos um campo e um seller.");
       return;
     }
-
     setLoading(true);
-    axios
-      .patch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/api/vtex/batch/orderform/configuration`,
-        {
-          ids: selectedSellers.map((seller) => seller.value),
-          patch: patch,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json-patch+json",
-            "X-VTEX-API-AppToken": appToken,
-            "X-VTEX-API-AppKey": appKey,
-          },
-        }
-      )
+    patchOrderForm(
+      selectedSellers.map((seller) => seller.value),
+      patch
+    )
       .then((resp) => {
         setLogs(resp.data);
         setLoading(false);
@@ -195,9 +176,9 @@ export default function OrderFormPage() {
           <label>AppKey</label>
           <input
             type="text"
-            value={appKey}
+            value={appKey || ""}
             onChange={(e) => {
-              setAppKey(e.target.value);
+              setAuth({ appToken: appToken, appKey: e.target.value });
             }}
           />
         </div>
@@ -205,9 +186,9 @@ export default function OrderFormPage() {
           <label>AppToken</label>
           <input
             type="text"
-            value={appToken}
+            value={appToken || ""}
             onChange={(e) => {
-              setAppToken(e.target.value);
+              setAuth({ appKey: appKey, appToken: e.target.value });
             }}
           />
         </div>

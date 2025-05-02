@@ -1,0 +1,16 @@
+.side-bar-link {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  gap: 15px;
+  p {
+    text-align: left;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+  }
+}
