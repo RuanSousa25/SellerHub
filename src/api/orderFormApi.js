@@ -1,9 +1,10 @@
 export const patchOrderFormBatch = async (api, ids, operations) => {
+  console.log(operations);
   return api.patch(
     "/vtex/batch/orderform/configuration",
     {
-      ids,
-      operations,
+      ids: ids,
+      patch: operations,
     },
     {
       headers: {

@@ -90,11 +90,14 @@ export default function OrderFormPage() {
         });
       }
     });
+    console.log(selectedSellers.map((seller) => seller.value));
+    console.log(patch);
     if (patch.length === 0 || selectedSellers.length === 0) {
       alert("Selecione ao menos um campo e um seller.");
       return;
     }
     setLoading(true);
+    console.log(patch);
     patchOrderForm(
       selectedSellers.map((seller) => seller.value),
       patch
