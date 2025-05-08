@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import MultiSelect from "../../Components/MultiSelect/MultiSelect";
 import "./OrderFormPage.css";
 import axios from "axios";
-import Logs from "../../Components/Logs/logs";
+import Logs from "../../Components/Logs/Logs";
 import { useAuth } from "../../Context/AuthContext";
 import { useOrderFormApi } from "../../Hooks/useOrderFormApi";
 import { useSellersApi } from "../../Hooks/useSellersApi";

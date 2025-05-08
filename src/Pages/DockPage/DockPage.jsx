@@ -3,7 +3,7 @@ import "./DockPage.css";
 import { useAuth } from "../../Context/AuthContext";
 import { useSellersApi } from "../../Hooks/useSellersApi";
 import MultiSelect from "../../Components/MultiSelect/MultiSelect";
-import Logs from "../../Components/Logs/logs";
+import Logs from "../../Components/Logs/Logs";
 import useLogisticsApi from "../../Hooks/useLogisticsApi";
 
 export default function DockPage() {
