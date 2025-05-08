@@ -1,11 +1,9 @@
 import React from "react";
 import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Header from "./Components/Header/header";
-import SideBar from "./Components/SideBar/SideBar";
 import Layout from "./Components/Layout/Layout";
 import OrderFormPage from "./Pages/OrderFormPage/OrderFormPage";
-import { AuthProvider, useAuth } from "./Context/AuthContext";
+import { useAuth } from "./Context/AuthContext";
 import DockPage from "./Pages/DockPage/DockPage";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 
