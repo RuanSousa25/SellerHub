@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const createApiClient = (appKey, appToken) => {
+const createApiClient = (jwtToken) => {
   const client = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
     headers: {
@@ -9,10 +9,10 @@ const createApiClient = (appKey, appToken) => {
     },
   });
 
-  if (appKey && appToken) {
+  if (jwtToken) {
     client.interceptors.request.use((config) => {
-      config.headers["X-VTEX-API-AppKey"] = appKey;
-      config.headers["X-VTEX-API-AppToken"] = appToken;
+      config.headers["Authorization"] = "Bearer " + jwtToken;
+
       return config;
     });
   }

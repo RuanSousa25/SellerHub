@@ -9,10 +9,10 @@ import { GoGear } from "react-icons/go";
 export default function SideBar() {
   return (
     <nav className="side-bar">
-      <SideBarLink Icon={LuBox} path={"/logistics"}>
+      <SideBarLink Icon={LuBox} path={"/SellerHub/logistics"}>
         Logística
       </SideBarLink>
-      <SideBarLink Icon={GoGear} path={"/orderform"}>
+      <SideBarLink Icon={GoGear} path={"/SellerHub/orderform"}>
         Configurações de pedidos
       </SideBarLink>
     </nav>

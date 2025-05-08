@@ -8,6 +8,7 @@ import useLogisticsApi from "../../Hooks/useLogisticsApi";
 
 export default function DockPage() {
   const { appKey, appToken, setAuth } = useAuth();
+  const { getToken } = useAuth();
   const { getSellersList } = useSellersApi();
   const { saveDockBatch } = useLogisticsApi();
   const [selectedSellers, setSelectedSellers] = useState([]);
@@ -16,7 +17,7 @@ export default function DockPage() {
   const [logs, setLogs] = useState([]);
   const [showLogs, setShowLogs] = useState(false);
   useEffect(() => {
-    if (appToken === null || appKey === null) return;
+    if (!getToken) return;
     setLoading(true);
     getSellersList()
       .then((resp) => {
@@ -31,7 +32,7 @@ export default function DockPage() {
         console.error;
         setLoading(false);
       });
-  }, [appKey, appToken]);
+  }, [getToken]);
   function handleCreateDocksSubmit() {
     if (selectedSellers.length === 0)
       alert("Selecione ao menos um campo e um seller.");
@@ -72,28 +73,6 @@ export default function DockPage() {
         <button onClick={toggleLogs} disabled={logs.length === 0}>
           Logs
         </button>
-      </div>
-      <div className="app-token-key">
-        <div className="appKey input-div-app">
-          <label>AppKey</label>
-          <input
-            type="text"
-            value={appKey || ""}
-            onChange={(e) => {
-              setAuth({ appToken: appToken, appKey: e.target.value });
-            }}
-          />
-        </div>
-        <div className="appToken input-div-app">
-          <label>AppToken</label>
-          <input
-            type="text"
-            value={appToken || ""}
-            onChange={(e) => {
-              setAuth({ appKey: appKey, appToken: e.target.value });
-            }}
-          />
-        </div>
       </div>
       <Logs show={showLogs} logs={logs} />
     </div>
