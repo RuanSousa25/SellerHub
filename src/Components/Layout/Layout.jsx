@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import React, { useState } from "react";
-import Header from "../Header/header";
+import Header from "../Header/Header";
 import SideBar from "../SideBar/SideBar";
 import { useAuth } from "../../Context/AuthContext";
 export default function Layout() {
