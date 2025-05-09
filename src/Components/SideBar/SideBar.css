@@ -1,0 +1,14 @@
+.side-bar {
+  margin: 0;
+  box-sizing: border-box;
+  width: 17.5rem;
+  background-color: #f5f5f5;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+  text-decoration: none;
+}
